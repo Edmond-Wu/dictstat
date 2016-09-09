@@ -8,8 +8,8 @@ typedef enum {false, true} bool;
 //Defines node struct
 typedef struct node {
         int word_count;
-	      int superword_count;
-	      int prefix_count;
+        int superword_count;
+        int prefix_count;
         char *key;
         struct node *children[26];
 } node;
