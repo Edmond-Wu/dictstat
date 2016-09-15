@@ -14,16 +14,6 @@ in the dictionary.*/
 
 node *root = NULL;
 
-//Initializes the tree with root node "root"
-node* makeRoot() {
-	root = malloc(sizeof(node));
-	root -> key = NULL;
-	root -> word_count = 0;
-	root -> prefix_count = 0;
-	root -> superword_count = 0;
-	return root;
-}
-
 //Creates a generic word-node
 node* makeNode() {
 	node *temp;
@@ -54,7 +44,7 @@ char* stringLower(char *word) {
 void insertWord(char *word) {
 	int word_length = strlen(word);
 	if (root == NULL) {
-		 root = makeRoot();
+		 root = makeNode();
 	}
 	node *pointer;
 	pointer = root;

@@ -14,9 +14,6 @@ typedef struct node {
         struct node *children[26];
 } node;
 
-//Initializes trie
-node* makeRoot();
-
 //Creates a word-node
 node* makeNode();
 
