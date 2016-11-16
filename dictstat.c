@@ -7,7 +7,7 @@ then reads from a data file, counting the number of occurrences, prefixes, and s
 in the dictionary.*/
 
 
-Node *root = NULL;
+Node *root = makeNode();
 
 //Creates a generic word-node
 Node* makeNode() {
@@ -33,8 +33,6 @@ char* stringLower(char *word) {
 //Adds a word-node to the trie
 void insertWord(char *word) {
 	int word_length = strlen(word);
-	if (root == NULL)
-		 root = makeNode();
 	Node *pointer = root;
 	char *copy = stringLower(word);
 	for (int i = 0; i < word_length; i++) {
@@ -83,7 +81,7 @@ void addWord(char *word) {
         }
 	free(copy);
 	if (pointer->key != NULL) {
-		pointer->word_count++;	
+		pointer->word_count++;
 		//calls the prefix function on all the word's children
 		for (int i = 0; i < ALPHABET; i++) {
                 	if (pointer->children[i] != NULL)
@@ -129,12 +127,12 @@ void readDict(FILE *dict_file) {
 	size_t length = ftell(dict_file);
 	rewind(dict_file);
 	char *buffer = (char *)malloc(sizeof(char) * length);
-	fread(buffer, 1, length, dict_file);		
+	fread(buffer, 1, length, dict_file);
 	char word[100];
 	memset(word, 0, sizeof(word));
 	bool is_empty = true;
 	for (int i = 0; i < length; i++) {
-		buffer[i] = tolower(buffer[i]);	
+		buffer[i] = tolower(buffer[i]);
 		if (isalpha(buffer[i])) {
 			is_empty = false;
 			*(word + strlen(word)) = buffer[i];
@@ -143,7 +141,7 @@ void readDict(FILE *dict_file) {
 			if (word[0] != 0)
 				insertWord(word);
 			memset(word, 0, sizeof(word));
-		}	
+		}
 	}
 	free(buffer);
 	if (is_empty == true)
@@ -181,7 +179,7 @@ void scanData(FILE *data_file) {
 int main(int argc, char **argv) {
 	if (argc != 3)
                 fprintf(stderr, "invalid input\n");
-	else {  
+	else {
 		if (argv[1] == NULL || argv[2] == NULL)
 			fprintf(stderr, "invalid input\n");
 		else {
@@ -205,4 +203,3 @@ int main(int argc, char **argv) {
 	}
 	return 0;
 }
-
