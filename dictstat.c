@@ -9,12 +9,12 @@ Node *root = NULL;
 
 //Creates a generic word-node
 Node* makeNode() {
-	Node *temp = malloc(sizeof(Node));
-	temp->key = NULL;
-	temp->word_count = 0;
-	temp->prefix_count = 0;
-	temp->superword_count = 0;
-	return temp;
+	Node *node = malloc(sizeof(Node));
+	node->key = NULL;
+	node->word_count = 0;
+	node->prefix_count = 0;
+	node->superword_count = 0;
+	return node;
 }
 
 //Converts word to lower-case
@@ -30,9 +30,9 @@ char* stringLower(char *word) {
 
 //Adds a word-node to the trie
 void insertWord(char *word) {
-	int word_length = strlen(word);
-	Node *pointer = root;
 	char *copy = stringLower(word);
+	int word_length = strlen(copy);
+	Node *pointer = root;
 	for (int i = 0; i < word_length; i++) {
 	        char current_letter = copy[i];
 	        int index = current_letter - 'a';
@@ -40,7 +40,8 @@ void insertWord(char *word) {
 			pointer->children[index] = makeNode();
 		pointer = pointer->children[index];
 	}
-	pointer->key = copy;
+	if (pointer->key == NULL)
+		pointer->key = copy;
 }
 
 //Increments the prefixes of word
