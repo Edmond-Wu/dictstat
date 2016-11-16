@@ -1,11 +1,9 @@
 #include "dictstat.h"
 #define ALPHABET 26
 
-
-/*Programming assignment that takes words from a dictionary file, creates a trie out of those words,
+/*Program that takes words from a dictionary file, creates a trie out of those words,
 then reads from a data file, counting the number of occurrences, prefixes, and superwords based on what's
 in the dictionary.*/
-
 
 Node *root = NULL;
 
@@ -69,13 +67,13 @@ void addWord(char *word) {
         Node *pointer = root;
         char *copy = stringLower(word);
         for (int i = 0; i < word_length; i++) {
-                char current_letter = copy[i];
+		char current_letter = copy[i];
 		int index = current_letter - 'a';
 		if (pointer->key != NULL)
 			pointer -> superword_count++;
 		if (pointer->children[index] == NULL) {
 			free(copy);
-                        return;
+			return;
 		}
                 pointer = pointer->children[index];
         }
@@ -109,9 +107,8 @@ void printTrie(Node *temp) {
 void destroyTrie(Node *temp) {
 	if (temp == NULL)
 		return;
-	for (int i = 0; i < ALPHABET; i++) {
+	for (int i = 0; i < ALPHABET; i++)
 		destroyTrie(temp->children[i]);
-	}
 	free(temp->key);
 	free(temp);
 }
@@ -178,20 +175,20 @@ void scanData(FILE *data_file) {
 //Main method
 int main(int argc, char **argv) {
 	if (argc != 3)
-                fprintf(stderr, "invalid input\n");
+                fprintf(stderr, "invalid number of arguments\n");
 	else {
 		if (argv[1] == NULL || argv[2] == NULL)
-			fprintf(stderr, "invalid input\n");
+			fprintf(stderr, "invalid input files\n");
 		else {
 			FILE *dict_pointer = fopen(argv[1], "r");
 			if (dict_pointer == NULL)
-				fprintf(stderr, "invalid input\n");
+				fprintf(stderr, "invalid dictionary file\n");
 			else {
 				root = makeNode();
 				readDict(dict_pointer);
 				FILE *data_pointer = fopen(argv[2], "r");
 				if (data_pointer == NULL)
-					fprintf(stderr, "invalid input\n");
+					fprintf(stderr, "invalid data file\n");
 				else {
 					scanData(data_pointer);
 					fclose(data_pointer);
