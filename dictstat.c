@@ -1,5 +1,4 @@
 #include "dictstat.h"
-
 #define ALPHABET 26
 
 
@@ -23,11 +22,10 @@ Node* makeNode() {
 //Converts word to lower-case
 char* stringLower(char *word) {
 	int length = strlen(word);
-        char *copy = malloc(1 + length);
+        char *copy = (char *)malloc(sizeof(char) * (1 + length));
 	strcpy(copy, word);
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < length; i++)
                 copy[i] = tolower(word[i]);
-        }
 	copy[length] = '\0';
 	return copy;
 }
@@ -39,13 +37,11 @@ void insertWord(char *word) {
 		 root = makeNode();
 	Node *pointer = root;
 	char *copy = stringLower(word);
-	
 	for (int i = 0; i < word_length; i++) {
 	        char current_letter = copy[i];
-	        int index = current_letter - 'a';		
-		if (pointer->children[index] == NULL) {
+	        int index = current_letter - 'a';
+		if (pointer->children[index] == NULL)
 			pointer->children[index] = makeNode();
-		}
 		pointer = pointer->children[index];
 	}
 	pointer->key = copy;
@@ -74,16 +70,18 @@ void addWord(char *word) {
 	}
         Node *pointer = root;
         char *copy = stringLower(word);
-
         for (int i = 0; i < word_length; i++) {
                 char current_letter = copy[i];
 		int index = current_letter - 'a';
 		if (pointer->key != NULL)
 			pointer -> superword_count++;
-		if (pointer->children[index] == NULL)
+		if (pointer->children[index] == NULL) {
+			free(copy);
                         return;
+		}
                 pointer = pointer->children[index];
         }
+	free(copy);
 	if (pointer->key != NULL) {
 		pointer->word_count++;	
 		//calls the prefix function on all the word's children
@@ -92,11 +90,8 @@ void addWord(char *word) {
                         	incrementPrefixes(pointer->children[i]);
 		}
         }
-	else {
-		//else if the last pointer didn't have a key then just call the prefix function
-		incrementPrefixes(pointer);
-	}
-	free(copy);
+	else
+		incrementPrefixes(pointer); //else if the last pointer didn't have a key then just call the prefix functio
 }
 
 
@@ -129,17 +124,15 @@ void readDict(FILE *dict_file) {
 		fprintf(stderr, "invalid input\n");
 		return;
 	}
-	
 	//stores the contents in the file as a string
 	fseek(dict_file, 0, SEEK_END);
 	size_t length = ftell(dict_file);
 	rewind(dict_file);
-	char *buffer = (char *)malloc(length);
+	char *buffer = (char *)malloc(sizeof(char) * length);
 	fread(buffer, 1, length, dict_file);		
 	char word[100];
 	memset(word, 0, sizeof(word));
 	bool is_empty = true;
-
 	for (int i = 0; i < length; i++) {
 		buffer[i] = tolower(buffer[i]);	
 		if (isalpha(buffer[i])) {
@@ -163,16 +156,14 @@ void scanData(FILE *data_file) {
                 fprintf(stderr, "invalid input\n");
 		return;
         }
-
 	//stores file contents as a string
         fseek(data_file, 0, SEEK_END);
         size_t length = ftell(data_file);
         rewind(data_file);
-        char *buffer = (char *)malloc(length);
+        char *buffer = (char *)malloc(sizeof(char) * length);
         fread(buffer, 1, length, data_file);
         char word[100];
         memset(word, 0, sizeof(word));
-
         for (int i = 0; i < length; i++) {
                 buffer[i] = tolower(buffer[i]);
                 if (isalpha(buffer[i]))

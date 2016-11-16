@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#define ALPHABET 26
 
 typedef enum {false, true} bool;
 
@@ -11,7 +12,7 @@ typedef struct Node {
         int superword_count;
         int prefix_count;
         char *key;
-        struct Node *children[26];
+        struct Node *children[ALPHABET];
 } Node;
 
 //Creates a word-node
