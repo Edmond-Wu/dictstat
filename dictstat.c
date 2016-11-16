@@ -8,11 +8,11 @@ then reads from a data file, counting the number of occurrences, prefixes, and s
 in the dictionary.*/
 
 
-node *root = NULL;
+Node *root = NULL;
 
 //Creates a generic word-node
-node* makeNode() {
-	node *temp = malloc(sizeof(node));
+Node* makeNode() {
+	Node *temp = malloc(sizeof(Node));
 	temp->key = NULL;
 	temp->word_count = 0;
 	temp->prefix_count = 0;
@@ -37,7 +37,7 @@ void insertWord(char *word) {
 	int word_length = strlen(word);
 	if (root == NULL)
 		 root = makeNode();
-	node *pointer = root;
+	Node *pointer = root;
 	char *copy = stringLower(word);
 	
 	for (int i = 0; i < word_length; i++) {
@@ -52,7 +52,7 @@ void insertWord(char *word) {
 }
 
 //Increments the prefixes of word
-void incrementPrefixes(node *word_node) {
+void incrementPrefixes(Node *word_node) {
 	if (word_node == NULL)
                 return;
 	if (word_node->key != NULL)
@@ -72,7 +72,7 @@ void addWord(char *word) {
 		fprintf(stderr, "Empty dictionary.\n");
 		return;
 	}
-        node *pointer = root;
+        Node *pointer = root;
         char *copy = stringLower(word);
 
         for (int i = 0; i < word_length; i++) {
@@ -85,8 +85,7 @@ void addWord(char *word) {
                 pointer = pointer->children[index];
         }
 	if (pointer->key != NULL) {
-		pointer->word_count++;
-		
+		pointer->word_count++;	
 		//calls the prefix function on all the word's children
 		for (int i = 0; i < ALPHABET; i++) {
                 	if (pointer->children[i] != NULL)
@@ -102,24 +101,23 @@ void addWord(char *word) {
 
 
 //Traverses the tree and prints out all the entries
-void printTrie(node *temp) {
+void printTrie(Node *temp) {
         if (temp == NULL)
                 return;
         if (temp->key && temp != root)
 		printf("%s %d %d %d\n", temp->key, temp->word_count, temp->prefix_count, temp->superword_count);
         for (int i = 0; i < ALPHABET; i++) {
-		if (temp -> children[i] != NULL)
-			printTrie(temp -> children[i]); //recursive call
+		if (temp->children[i] != NULL)
+			printTrie(temp->children[i]); //recursive call
         }
 }
 
 //Frees the trie
-void destroyTrie(node *temp) {
+void destroyTrie(Node *temp) {
 	if (temp == NULL)
 		return;
 	for (int i = 0; i < ALPHABET; i++) {
-		if (temp -> children[i] != NULL)
-			destroyTrie(temp -> children[i]); //recursive call
+		destroyTrie(temp->children[i]);
 	}
 	free(temp->key);
 	free(temp);
