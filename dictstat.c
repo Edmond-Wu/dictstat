@@ -34,8 +34,8 @@ void insertWord(char *word) {
 	int word_length = strlen(copy);
 	Node *pointer = root;
 	for (int i = 0; i < word_length; i++) {
-	        char current_letter = copy[i];
-	        int index = current_letter - 'a';
+		char current_letter = copy[i];
+		int index = current_letter - 'a';
 		if (pointer->children[index] == NULL)
 			pointer->children[index] = makeNode();
 		pointer = pointer->children[index];
@@ -47,10 +47,10 @@ void insertWord(char *word) {
 //Increments the prefixes of word
 void incrementPrefixes(Node *word_node) {
 	if (word_node == NULL)
-                return;
+		return;
 	if (word_node->key != NULL)
 		word_node->prefix_count++;
-        for (int i = 0; i < ALPHABET; i++) {
+	for (int i = 0; i < ALPHABET; i++) {
 		if (word_node->children[i] != NULL)
 			incrementPrefixes(word_node->children[i]); //recursive call
 	}
@@ -60,14 +60,14 @@ void incrementPrefixes(Node *word_node) {
 /*Takes a word from the data file, searches through the tree and increments its occurrence if it is in the trie
 Also increments the superword and prefix count of any word nodes reached before the end of the word*/
 void addWord(char *word) {
-        int word_length = strlen(word);
+	int word_length = strlen(word);
 	if (root == NULL) {
 		fprintf(stderr, "Empty dictionary.\n");
 		return;
 	}
-        Node *pointer = root;
-        char *copy = stringLower(word);
-        for (int i = 0; i < word_length; i++) {
+	Node *pointer = root;
+	char *copy = stringLower(word);
+	for (int i = 0; i < word_length; i++) {
 		char current_letter = copy[i];
 		int index = current_letter - 'a';
 		if (pointer->key != NULL)
@@ -76,17 +76,17 @@ void addWord(char *word) {
 			free(copy);
 			return;
 		}
-                pointer = pointer->children[index];
-        }
+		pointer = pointer->children[index];
+	}
 	free(copy);
 	if (pointer->key != NULL) {
 		pointer->word_count++;
 		//calls the prefix function on all the word's children
 		for (int i = 0; i < ALPHABET; i++) {
-                	if (pointer->children[i] != NULL)
-                        	incrementPrefixes(pointer->children[i]);
+			if (pointer->children[i] != NULL)
+				incrementPrefixes(pointer->children[i]);
 		}
-        }
+	}
 	else
 		incrementPrefixes(pointer); //else if the last pointer didn't have a key then just call the prefix functio
 }
@@ -94,14 +94,14 @@ void addWord(char *word) {
 
 //Traverses the tree and prints out all the entries
 void printTrie(Node *temp) {
-        if (temp == NULL)
-                return;
-        if (temp->key && temp != root)
+	if (temp == NULL)
+		return;
+	if (temp->key && temp != root)
 		printf("%s %d %d %d\n", temp->key, temp->word_count, temp->prefix_count, temp->superword_count);
-        for (int i = 0; i < ALPHABET; i++) {
+	for (int i = 0; i < ALPHABET; i++) {
 		if (temp->children[i] != NULL)
 			printTrie(temp->children[i]); //recursive call
-        }
+	}
 }
 
 //Frees the trie
@@ -149,34 +149,34 @@ void readDict(FILE *dict_file) {
 //Scans the data file for words from the dictionary
 void scanData(FILE *data_file) {
 	if (data_file == NULL) {
-                fprintf(stderr, "invalid input\n");
+		fprintf(stderr, "invalid input\n");
 		return;
-        }
+	}
 	//stores file contents as a string
-        fseek(data_file, 0, SEEK_END);
-        size_t length = ftell(data_file);
-        rewind(data_file);
-        char *buffer = (char *)malloc(sizeof(char) * length);
-        fread(buffer, 1, length, data_file);
-        char word[100];
-        memset(word, 0, sizeof(word));
-        for (int i = 0; i < length; i++) {
-                buffer[i] = tolower(buffer[i]);
-                if (isalpha(buffer[i]))
-                        *(word + strlen(word)) = buffer[i];
-                else {
-                        if (word[0] != 0)
+	fseek(data_file, 0, SEEK_END);
+	size_t length = ftell(data_file);
+	rewind(data_file);
+	char *buffer = (char *)malloc(sizeof(char) * length);
+	fread(buffer, 1, length, data_file);
+	char word[500];
+	memset(word, 0, sizeof(word));
+	for (int i = 0; i < length; i++) {
+		buffer[i] = tolower(buffer[i]);
+		if (isalpha(buffer[i]))
+			*(word + strlen(word)) = buffer[i];
+		else {
+			if (word[0] != 0)
 				addWord(word);
-                        memset(word, 0, sizeof(word));
-                }
-        }
+			memset(word, 0, sizeof(word));
+		}
+  }
 	free(buffer);
 }
 
 //Main method
 int main(int argc, char **argv) {
 	if (argc != 3)
-                fprintf(stderr, "invalid number of arguments\n");
+		fprintf(stderr, "invalid number of arguments\n");
 	else {
 		if (argv[1] == NULL || argv[2] == NULL)
 			fprintf(stderr, "invalid input files\n");
