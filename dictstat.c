@@ -7,7 +7,7 @@ then reads from a data file, counting the number of occurrences, prefixes, and s
 in the dictionary.*/
 
 
-Node *root = makeNode();
+Node *root = NULL;
 
 //Creates a generic word-node
 Node* makeNode() {
@@ -187,6 +187,7 @@ int main(int argc, char **argv) {
 			if (dict_pointer == NULL)
 				fprintf(stderr, "invalid input\n");
 			else {
+				root = makeNode();
 				readDict(dict_pointer);
 				FILE *data_pointer = fopen(argv[2], "r");
 				if (data_pointer == NULL)
