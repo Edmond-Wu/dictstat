@@ -1,7 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
 #include "dictstat.h"
 
 #define ALPHABET 26
@@ -46,9 +42,7 @@ void insertWord(char *word) {
 	if (root == NULL) {
 		 root = makeNode();
 	}
-	node *pointer;
-	pointer = root;
-	
+	node *pointer = root;
 	char *copy = stringLower(word);
 	
 	for (int i = 0; i < word_length; i++) {
